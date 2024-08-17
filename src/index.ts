@@ -3,18 +3,9 @@ import mongoose from "mongoose"
 import { configDotenv } from "dotenv"
 import productsRouter from "./routes/products.routes"
 import { config } from "./config/config"
+import app from "./app"
 
-// app
-const app:Application = express()
 
-// app - use
-app.use(express.json())
-
-// routes
-app.get("/", (req, res) => {
-  res.status(200).send("Start Backend with typescript.")
-})
-app.use("/products", productsRouter)
 
 // db + server
 mongoose
