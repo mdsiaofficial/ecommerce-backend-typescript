@@ -2,6 +2,7 @@ import express, { Application } from "express"
 import mongoose from "mongoose"
 import { configDotenv } from "dotenv"
 import productsRouter from "./routes/products.routes"
+import { config } from "./config/config"
 
 // app
 const app:Application = express()
@@ -15,16 +16,15 @@ app.get("/", (req, res) => {
 })
 app.use("/products", productsRouter)
 
-
 // db + server
 mongoose
-  .connect(process.env.MONGODB_URL || "")
+  .connect(config.MONGODB_URL)
   .then(() => {
     console.log("Application connected to DB.")
     
     // server start
-    app.listen(process.env.PORT || 3000, () => {
-      console.log(`Server is running on port ${process.env.PORT || 3000} `)
+    app.listen(config.port, () => {
+      console.log(`Server is running on port ${config.port} `)
     })
   })
   .catch((error) => {

@@ -3,9 +3,11 @@ import mongoose from "mongoose";
 export type TUser = {
   _id: string,
   name: string,
+  email: string,
   password: string,
-  role: number,
+  role: "user" | "admin",
 }
+
 const userSchema = new mongoose.Schema(
   {
     name: {
@@ -22,6 +24,7 @@ const userSchema = new mongoose.Schema(
     },
     role: {
       type: String,
+      enum: ["user", "admin"],
       required:true,
     }
   },{timestamps:true}
