@@ -1,10 +1,10 @@
 import mongoose from "mongoose";
 
-export type TOrderProduct = {
+export interface TOrderProduct extends Document {
   productId: string,
   quantity: number,
 }
-export type TOrder = {
+export interface TOrder extends Document {
   _id: string,
   orderNumber: number,
   userId: string,

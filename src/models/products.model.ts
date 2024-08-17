@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-export type TProduct = {
+export interface TProduct extends Document {
   _id: string,
   name: string,
   description: string,

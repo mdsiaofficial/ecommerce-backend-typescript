@@ -1,13 +1,14 @@
 import { Request, Response } from "express";
 import { Users } from "../models/users.model";
-const bcrypt = require("bcryptjs")
+import bcrypt from "bcryptjs"
 
 
 export const fetchAllUsers = async (req: Request, res: Response) => {
   try {
     const users = await Users.find()
     if (!users) {
-      res.status(404).json({message: "data not error"})
+      // res.status(404).json({message: "data not error"})
+      // throw new Error("User not found.")
     }
     res.status(200).json({message: "Data found.", data:users})
   } catch (error) {
@@ -24,7 +25,7 @@ export const registerUser = async (req: Request, res: Response) => {
       console.log(`Users already exists. Please go to login.`)
       // res.status(400).json({ message: "User already exists." })
     }
-    const newPassword = bcrypt.hashSync(password, 14)
+    const newPassword = bcrypt.hash(password, 14)
     const newUser = await Users.create({
       name,
       email,
@@ -47,7 +48,7 @@ export const loginUser = async (req: Request, res: Response) => {
       console.log(`Users not exists. Please go to register.`)
       res.status(400).json({ message: "User already exists." })
     }
-    const isOk = bcrypt.compareSync(password, user?.password)
+    const isOk = bcrypt.compare(password, user.password)
     if (!isOk) { 
       console.log(`Password is incorrect.`)
       res.status(400).json({ message: "Password is incorrect." })
