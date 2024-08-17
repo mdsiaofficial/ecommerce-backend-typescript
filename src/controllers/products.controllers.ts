@@ -1,12 +1,13 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import Products, { TProduct } from "../models/products.model";
 
-export const fetchProducts = async (req: Request, res: Response) => {
+export const fetchProducts = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const products:TProduct[] = await Products.find();
     res.status(200).json({ message: "Products", products });
   } catch (error) {
-    res.status(500).json({ message: "Error fetching products", error });
+    // res.status(500).json({ message: "Error fetching products", error });
+    next(error)
   }
 }
 
@@ -22,16 +23,23 @@ export const createProducts = async (req: Request, res: Response) => {
   }
 }
 
-export const fetchProduct = async (req: Request, res: Response) => {
+export const fetchProduct = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { id } = req.params;
+    if (!id) {
+      throw new Error("id not found")
+      // throw new ApiError( 201, "id not found")
+    }
     const product = await Products.findById(id);
     if (!product) {
-      return res.status(404).json({ message: "Product not found" });
+      // return res.status(404).json({ message: "Product not found" });
+      throw new Error("Product not found")
     }
     res.status(200).json({ message: "Product", product });
   } catch (error) {
-    res.status(500).json({ message: "Error fetching product", error });
+    // res.status(500).json({ message: "Error fetching product", error });
+    // return res.status(500).json(new Error ( "new api error throwing..."))
+    next(error)
   }
 }
 
