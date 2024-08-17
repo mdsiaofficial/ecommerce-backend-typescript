@@ -16,7 +16,7 @@ export const fetchAllUsers = async (req: Request, res: Response) => {
   }
 }
 
-export const createUser = async (req: Request, res: Response) => {
+export const registerUser = async (req: Request, res: Response) => {
   try {
     const { name, email, password, role } = req.body
     const user = await Users.findOne({ email })
@@ -33,6 +33,26 @@ export const createUser = async (req: Request, res: Response) => {
     })
     res.status(201).json({message: "User created successfully", data: newUser})
 
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({message: "server error"})
+  }
+}
+
+export const loginUser = async (req: Request, res: Response) => {
+  try {
+    const { email, password } = req.body
+    const user = await Users.findOne({ email })
+    if (!user) {
+      console.log(`Users not exists. Please go to register.`)
+      res.status(400).json({ message: "User already exists." })
+    }
+    const isOk = bcrypt.compareSync(password, user?.password)
+    if (!isOk) { 
+      console.log(`Password is incorrect.`)
+      res.status(400).json({ message: "Password is incorrect." })
+    }
+    res.status(201).json({message: "User logged in successfully", data: user})
   } catch (error) {
     console.log(error)
     res.status(500).json({message: "server error"})

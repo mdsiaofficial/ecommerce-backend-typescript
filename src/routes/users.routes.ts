@@ -1,10 +1,11 @@
 import express from 'express'
-import { createUser, fetchAllUsers } from '../controllers/users.controllers'
+import { fetchAllUsers, loginUser, registerUser } from '../controllers/users.controllers'
 
 const usersRouter = express.Router()
 
 usersRouter.get("/", fetchAllUsers)
-usersRouter.post("/", createUser)
+usersRouter.post("/register", registerUser)
+usersRouter.get("/login", loginUser)
 
 
 export default usersRouter
